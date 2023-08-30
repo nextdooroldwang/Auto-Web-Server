@@ -1,32 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 3007; // 指定服务器端口
-
-const fs = require("fs");
-const path = require("path");
-
-function buildHierarchy(dirPath) {
-  const items = fs.readdirSync(dirPath);
-
-  const result = [];
-
-  items.forEach((item) => {
-    const fullPath = path.join(dirPath, item);
-    const stats = fs.statSync(fullPath);
-
-    const node = {
-      name: item,
-    };
-
-    if (stats.isDirectory()) {
-      node.children = buildHierarchy(fullPath);
-    }
-
-    result.push(node);
-  });
-
-  return result;
-}
+const pageRoutes = require("./routes/pageRoutes");
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -52,17 +27,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 定义路由
-app.get("/", (req, res) => {
-  res.json({ data: "Hello, Node.js Server!" });
-});
-
-app.get("/product", (req, res) => {
-  const folderPath = req.query.path;
-  const allFiles = buildHierarchy(folderPath);
-  res.json({ data: allFiles });
-});
-
+app.use("/", pageRoutes);
 // 启动服务器
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
