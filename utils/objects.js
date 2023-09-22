@@ -11,7 +11,8 @@ const buildHierarchy = (dirPath) => {
     const stats = fs.statSync(fullPath);
 
     const node = {
-      name: item,
+      title: item,
+      key: fullPath,
     };
 
     if (stats.isDirectory()) {

@@ -1,4 +1,6 @@
 const express = require("express");
+require("express-async-errors");
+
 const app = express();
 const port = 3007; // 指定服务器端口
 const pageRoutes = require("./routes/pageRoutes");
@@ -28,6 +30,21 @@ app.use((req, res, next) => {
 });
 
 app.use("/", pageRoutes);
+
+app.use(function (err, req, res, next) {
+  console.log("=====================》err:", err);
+  if (err.status === 401) {
+    console.log("token Invalid");
+    return res.send(JSON.stringify({ code: 401, message: "token Invalid" }));
+  }
+  if (err.message.indexOf("BadRequestError") !== -1) {
+    return res.send(
+      JSON.stringify({ code: 400, message: err.message.split("#")[1] })
+    );
+  }
+
+  return res.send(JSON.stringify({ code: 500, message: err.message }));
+});
 // 启动服务器
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
