@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 require("express-async-errors");
 
 const app = express();
@@ -12,6 +13,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(bodyParser.json());
 // 自定义中间件：统一响应结构
 app.use((req, res, next) => {
   // 重写 res.json 方法
@@ -35,15 +37,15 @@ app.use(function (err, req, res, next) {
   console.log("=====================》err:", err);
   if (err.status === 401) {
     console.log("token Invalid");
-    return res.send(JSON.stringify({ code: 401, message: "token Invalid" }));
+    return res.send(JSON.stringify({ code: 401, msg: "token Invalid" }));
   }
   if (err.message.indexOf("BadRequestError") !== -1) {
     return res.send(
-      JSON.stringify({ code: 400, message: err.message.split("#")[1] })
+      JSON.stringify({ code: 400, msg: err.message.split("#")[1] })
     );
   }
 
-  return res.send(JSON.stringify({ code: 500, message: err.message }));
+  return res.send(JSON.stringify({ code: 500, msg: err.message }));
 });
 // 启动服务器
 app.listen(port, () => {
