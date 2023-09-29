@@ -95,8 +95,34 @@ function createFileOrFolder(targetPath, content) {
   }
 }
 
+function toComponentName(input) {
+  return input
+    .toLowerCase()
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+    .replace(/^\w/, (char) => char.toUpperCase());
+}
+function toCamelCase(input) {
+  return input
+    .toLowerCase()
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase());
+}
+function getParentFolderOrFileName(filePath) {
+  const fileName = path.basename(filePath, path.extname(filePath));
+
+  if (fileName === "index") {
+    const parentFolder = path.basename(path.dirname(filePath));
+    return parentFolder;
+  } else {
+    return fileName;
+  }
+}
+
 module.exports = {
   buildHierarchy,
   deleteFileOrFolder,
   createFileOrFolder,
+  toCamelCase,
+  toCamelCase,
+  toComponentName,
+  getParentFolderOrFileName,
 };

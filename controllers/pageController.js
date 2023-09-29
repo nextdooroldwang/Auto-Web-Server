@@ -2,8 +2,11 @@ const {
   buildHierarchy,
   deleteFileOrFolder,
   createFileOrFolder,
+  getParentFolderOrFileName,
 } = require("../utils/objects/file");
-// 控制器操作
+
+const { pageBase } = require("../templates/page/index");
+
 module.exports = {
   getPages: (req, res) => {
     const folderPath = req.query.path;
@@ -17,7 +20,7 @@ module.exports = {
   },
   createPage: (req, res) => {
     const { path } = req.body;
-    createFileOrFolder(path, "");
+    createFileOrFolder(path, pageBase(getParentFolderOrFileName(path)));
     res.json(true);
   },
 };
