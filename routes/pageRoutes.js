@@ -9,4 +9,5 @@ router.get("/pages", pageController.getPages);
 router.post("/pages", pageController.createPage);
 router.delete("/pages", pageController.deletePage);
 
+router.post("/module", pageController.createModule);
 module.exports = router;

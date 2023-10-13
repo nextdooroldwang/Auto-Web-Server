@@ -116,6 +116,29 @@ function getParentFolderOrFileName(filePath) {
     return fileName;
   }
 }
+// 检查是否存在文件夹的函数
+function folderExists(folderPath) {
+  return fs.existsSync(folderPath) && fs.statSync(folderPath).isDirectory();
+}
+
+// 检查是否存在文件的函数
+function fileExists(filePath) {
+  return fs.existsSync(filePath) && fs.statSync(filePath).isFile();
+}
+
+// 查找文件夹和文件的函数
+function findFolderAndFile(path, key) {
+  const folderPath = path + "/" + key; // 创建目标文件夹的路径
+  const filePath = path + "/" + key + "/index.tsx"; // 创建目标文件的路径
+
+  if (!folderExists(folderPath)) {
+    return "folder"; // 文件夹不存在，返回'folder'
+  } else if (!fileExists(filePath)) {
+    return "file"; // 文件夹存在，但文件不存在，返回'file'
+  } else {
+    return "had"; // 文件夹和文件都存在，返回'had'
+  }
+}
 
 module.exports = {
   buildHierarchy,
@@ -125,4 +148,7 @@ module.exports = {
   toCamelCase,
   toComponentName,
   getParentFolderOrFileName,
+  folderExists,
+  fileExists,
+  findFolderAndFile,
 };
