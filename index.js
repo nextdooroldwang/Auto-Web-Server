@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const formatRequestParams = require("./middleware/formatRequestParams");
 require("express-async-errors");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+app.use(formatRequestParams);
 // 自定义中间件：统一响应结构
 app.use((req, res, next) => {
   // 重写 res.json 方法

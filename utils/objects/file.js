@@ -144,6 +144,8 @@ module.exports = {
   buildHierarchy,
   deleteFileOrFolder,
   createFileOrFolder,
+  createFolder,
+  createFile,
   toCamelCase,
   toCamelCase,
   toComponentName,
