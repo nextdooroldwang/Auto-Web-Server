@@ -143,6 +143,8 @@ function findFolderAndFile(path, key) {
 module.exports = {
   buildHierarchy,
   deleteFileOrFolder,
+  deleteFolderRecursive,
+  deleteFile,
   createFileOrFolder,
   createFolder,
   createFile,

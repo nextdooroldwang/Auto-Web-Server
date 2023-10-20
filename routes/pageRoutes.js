@@ -10,4 +10,5 @@ router.post("/pages", pageController.createPage);
 router.delete("/pages", pageController.deletePage);
 
 router.post("/module", pageController.createModule);
+router.delete("/module", pageController.deleteModule);
 module.exports = router;

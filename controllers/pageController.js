@@ -1,6 +1,8 @@
 const {
   buildHierarchy,
   deleteFileOrFolder,
+  deleteFolderRecursive,
+  deleteFile,
   createFileOrFolder,
   createFolder,
   createFile,
@@ -38,7 +40,6 @@ module.exports = {
   },
   createModule: (req, res) => {
     const { key, src, op } = req.body;
-    console.log(req.body);
     const { isIndexPage, isAddPage, isDetailPage } = op;
     const type = findFolderAndFile(`${src}/pages`, key);
     if (type === "folder") {
@@ -60,10 +61,33 @@ module.exports = {
     }
     if (isAddPage) {
       createFile(`${src}/pages/${key}/create.tsx`, createPage(key));
+      createFile(`${src}/types/${key}/create.ts`, "");
+      createFile(`${src}/hook/request/${key}/create.ts`, "");
+      createFile(
+        `${src}/hook/controller/${key}/useCreate${key}.ts`,
+        createController(key)
+      );
+      createFile(`${src}/components/${key}/create.tsx`, createComponent(key));
     }
     if (isDetailPage) {
       createFile(`${src}/pages/${key}/[id].tsx`, detailPage(key));
+      createFile(`${src}/types/${key}/detail.ts`, "");
+      createFile(`${src}/hook/request/${key}/detail.ts`, "");
+      createFile(
+        `${src}/hook/controller/${key}/use${key}Detail.ts`,
+        detailController(key)
+      );
+      createFile(`${src}/components/${key}/detail.tsx`, detailComponent(key));
     }
+    res.json(true);
+  },
+  deleteModule: (req, res) => {
+    const { key, src } = req.body;
+    deleteFolderRecursive(`${src}/pages/${key}`);
+    deleteFolderRecursive(`${src}/types/${key}`);
+    deleteFolderRecursive(`${src}/hook/request/${key}`);
+    deleteFolderRecursive(`${src}/hook/controller/${key}`);
+    deleteFolderRecursive(`${src}/components/${key}`);
     res.json(true);
   },
 };
