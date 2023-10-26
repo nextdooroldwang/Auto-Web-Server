@@ -1,6 +1,18 @@
 const fs = require("fs");
 const path = require("path");
 
+function toComponentName(input) {
+  return input
+    .toLowerCase()
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+    .replace(/^\w/, (char) => char.toUpperCase());
+}
+function toCamelCase(input) {
+  return input
+    .toLowerCase()
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase());
+}
+//所有文件
 const buildHierarchy = (dirPath) => {
   const items = fs.readdirSync(dirPath);
 
@@ -18,6 +30,26 @@ const buildHierarchy = (dirPath) => {
     if (stats.isDirectory()) {
       node.children = buildHierarchy(fullPath);
     }
+
+    result.push(node);
+  });
+
+  return result;
+};
+//当前文件夹下tsx文件
+const getTsxFiles = (dirPath) => {
+  const items = fs.readdirSync(dirPath);
+
+  const result = [];
+
+  items.forEach((item) => {
+    if (!item.endsWith(".tsx")) return;
+    const fullPath = path.join(dirPath, item);
+
+    const node = {
+      title: toComponentName(item.split(".")[0]),
+      key: fullPath,
+    };
 
     result.push(node);
   });
@@ -95,17 +127,6 @@ function createFileOrFolder(targetPath, content) {
   }
 }
 
-function toComponentName(input) {
-  return input
-    .toLowerCase()
-    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
-    .replace(/^\w/, (char) => char.toUpperCase());
-}
-function toCamelCase(input) {
-  return input
-    .toLowerCase()
-    .replace(/[-_](.)/g, (_, char) => char.toUpperCase());
-}
 function getParentFolderOrFileName(filePath) {
   const fileName = path.basename(filePath, path.extname(filePath));
 
@@ -140,8 +161,44 @@ function findFolderAndFile(path, key) {
   }
 }
 
+function copyFileSync(sourceFilePath, targetFilePath) {
+  try {
+    // 同步读取源文件的内容
+    const data = fs.readFileSync(sourceFilePath, "utf8");
+
+    // 同步将内容写入目标文件
+    fs.writeFileSync(targetFilePath, data, "utf8");
+    console.log("文件内容已成功复制到目标文件。");
+  } catch (err) {
+    console.error("文件操作出错: " + err.message);
+  }
+}
+
+function modifyFileToDart(filePath) {
+  const fixedPart = "__dart";
+
+  // 使用正则表达式匹配文件名
+  const match = filePath.match(/\/([^/]+)\.tsx$/);
+
+  if (match) {
+    // 获取匹配的文件名（不包括扩展名）
+    const originalFileName = match[1];
+
+    // 替换文件名
+    const newPath = filePath.replace(
+      new RegExp(`\/${originalFileName}\.tsx$`),
+      `/${fixedPart}.tsx`
+    );
+
+    return newPath;
+  } else {
+    return filePath; // 如果无法匹配文件名，返回原路径
+  }
+}
+
 module.exports = {
   buildHierarchy,
+  getTsxFiles,
   deleteFileOrFolder,
   deleteFolderRecursive,
   deleteFile,
@@ -155,4 +212,6 @@ module.exports = {
   folderExists,
   fileExists,
   findFolderAndFile,
+  copyFileSync,
+  modifyFileToDart,
 };

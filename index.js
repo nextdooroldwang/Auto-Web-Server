@@ -6,6 +6,7 @@ require("express-async-errors");
 const app = express();
 const port = 3007; // 指定服务器端口
 const pageRoutes = require("./routes/pageRoutes");
+const viewRoutes = require("./routes/viewRoutes");
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", pageRoutes);
+app.use("/view", viewRoutes);
 
 app.use(function (err, req, res, next) {
   console.log("=====================》err:", err);

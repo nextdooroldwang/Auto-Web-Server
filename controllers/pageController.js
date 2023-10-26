@@ -10,7 +10,12 @@ const {
   getParentFolderOrFileName,
 } = require("../utils/objects/file");
 
-const { basePage, createPage, detailPage } = require("../templates/page/index");
+const {
+  createLayout,
+  basePage,
+  createPage,
+  detailPage,
+} = require("../templates/page/index");
 const {
   baseController,
   createController,
@@ -46,6 +51,10 @@ module.exports = {
       createFolder(`${src}/pages/${key}`);
     }
     if (isIndexPage) {
+      createFile(
+        `${src}/pages/${key}/_layout.tsx`,
+        createLayout("main-layout")
+      );
       createFile(`${src}/pages/${key}/index.tsx`, basePage(key));
       createFolder(`${src}/types/${key}`);
       createFile(`${src}/types/${key}/index.ts`, "");

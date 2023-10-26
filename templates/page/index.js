@@ -1,5 +1,18 @@
 const { toCamelCase, toComponentName } = require("../../utils/objects/file");
 
+function createLayout(layout) {
+  console.log(layout);
+  const componentname = toComponentName(layout);
+  return `
+import ${componentname} from '@/layout/${layout}';
+
+export default function Layout() {
+  return <${componentname} />;
+}
+
+  `;
+}
+
 function basePage(fileName) {
   const name = toCamelCase(fileName);
   const componentname = toComponentName(fileName);
@@ -62,6 +75,7 @@ export default ${componentname}DetailComponent;
 }
 
 module.exports = {
+  createLayout,
   basePage,
   createPage,
   detailPage,
