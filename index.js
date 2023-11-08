@@ -7,6 +7,7 @@ const app = express();
 const port = 3007; // 指定服务器端口
 const pageRoutes = require("./routes/pageRoutes");
 const viewRoutes = require("./routes/viewRoutes");
+const googleRoutes = require("./routes/googleRoutes");
 
 app.use((req, res, next) => {
   console.log("---->", req.url);
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
 
 app.use("/", pageRoutes);
 app.use("/view", viewRoutes);
+app.use("/google", googleRoutes);
 
 app.use(function (err, req, res, next) {
   console.log("=====================》err:", err);
