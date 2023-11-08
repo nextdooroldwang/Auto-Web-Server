@@ -9,6 +9,7 @@ const pageRoutes = require("./routes/pageRoutes");
 const viewRoutes = require("./routes/viewRoutes");
 
 app.use((req, res, next) => {
+  console.log("---->", req.url);
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization"); // 添加Authorization

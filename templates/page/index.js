@@ -1,13 +1,13 @@
 const { toCamelCase, toComponentName } = require("../../utils/objects/file");
 
 function createLayout(layout) {
-  console.log(layout);
   const componentname = toComponentName(layout);
   return `
 import ${componentname} from '@/layout/${layout}';
+import SampleEditorWarpper from '@/components/sample/components/common/warpper';
 
 export default function Layout() {
-  return <${componentname} />;
+  return <SampleEditorWarpper><${componentname} /></SampleEditorWarpper>;
 }
 
   `;

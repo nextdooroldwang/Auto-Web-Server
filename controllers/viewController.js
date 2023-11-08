@@ -35,4 +35,23 @@ module.exports = {
 
     res.json(true);
   },
+  createComponent: (req, res) => {
+    const { src, path, layout } = req.body;
+    const editorPagePath = `${src}/pages/Sample/editor.tsx`;
+    if (fileExists(editorPagePath)) {
+      deleteFile(editorPagePath);
+    }
+    const splitResult = path.split("/src")[1];
+    createFile(editorPagePath, editorPage(splitResult));
+    if (fileExists(`${path}/__dart.tsx`)) {
+      deleteFile(`${path}/__dart.tsx`);
+    }
+    createFile(`${path}/__dart.tsx`, "");
+    if (fileExists(`${src}/pages/Sample/_layout.tsx`)) {
+      deleteFile(`${src}/pages/Sample/_layout.tsx`);
+    }
+    createFile(`${src}/pages/Sample/_layout.tsx`, createLayout(layout));
+
+    res.json(true);
+  },
 };
